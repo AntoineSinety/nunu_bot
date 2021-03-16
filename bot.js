@@ -149,4 +149,4 @@ client.on('message', msg => {
 
 
 
-client.login(env.NUNU_TOKEN);
+client.login(process.env.NUNU_TOKEN);
