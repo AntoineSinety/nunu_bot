@@ -119,7 +119,7 @@ function compte_a_rebours()
     {
         compte_a_rebours = 'Compte à rebours terminé.';
     }
-    compte_a_rebours +=  ' avant le premier stream de MisterDougi ! '
+    compte_a_rebours +=  ' avant le premier live de MisterDougi ! '
     console.log(compte_a_rebours);
     return compte_a_rebours;
 }
