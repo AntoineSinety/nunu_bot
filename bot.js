@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 
 var fs = require("fs");
+const { env } = require("process");
 
 
 var serverPerso= {
@@ -148,4 +149,4 @@ client.on('message', msg => {
 
 
 
-client.login('Njc0OTg3ODMxNjcxOTE0NTU2.Xjwljw.vNCVIRp8vjIztb9maNjRR43g-_c');
+client.login(env.NUNU_TOKEN);
