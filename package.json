@@ -11,7 +11,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bot.js",
+    "start": "worker node bot.js",
     "worker": "worker node bot.js"
   },
   "repository": {
