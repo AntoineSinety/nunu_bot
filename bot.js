@@ -1,11 +1,12 @@
+require('dotenv').config();
 
 
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
-var fs = require("fs");
-const { env } = require("process");
+const fetch = require("node-fetch");
 
+var fs = require("fs");
 
 
 var serverPerso= {
@@ -126,6 +127,9 @@ function compte_a_rebours()
 
 
 
+
+
+
 client.on('message', msg => {
 
     console.log(msg.content);
@@ -133,21 +137,171 @@ client.on('message', msg => {
     if (msg.content.toLowerCase().includes('hihi')) {
         msg.channel.send(voices[Math.floor(Math.random() * Math.floor(4))]);
         // msg.channel.send('J\'voulais dire "It\'s" :( ');
-        console.log(voices);
+        // console.log(voices);
     }
 
-    if (msg.content.toLowerCase().includes('stream')) {
+    if (msg.content.toLowerCase().includes('!stream')) {
         var strgDougi = compte_a_rebours();
         msg.channel.send(strgDougi);
-        console.log(voices);
+        // console.log(voices);
     }
     
-    if (msg.content.toLowerCase().includes('rs')) {
+    if (msg.content.toLowerCase().includes('!rs')) {
         msg.channel.send('N\'oubliez pas de vous sub aux réseaux sociaux : Twitch: twitch.tv/MisterDougi / Twitter : @MisterDougi / Wikipédia : wikipedia.com/dieu');
-        console.log(voices);
+        // console.log(voices);
     }
+
+    if (msg.content.toLowerCase().includes('antoine')) {
+        msg.react("490170545447501839");
+    }
+    if (msg.content.toLowerCase().includes('albe')) {
+        msg.react("490164238183038976");
+    }
+    if (msg.content.includes('albé')) {
+        msg.react("490164238183038976");
+    }
+    if (msg.content.toLowerCase().includes('thomas')) {
+        msg.react("557866810653933589");
+    }
+    if (msg.content.toLowerCase().includes('random')) {
+        msg.react("🐙");
+        console.log(msg.content);
+    }
+    if (msg.content.toLowerCase().includes('!io')) {
+
+                var pseudo = msg.content.substring(4);
+                var resultIO;
+
+                
+                const url = "https://raider.io/api/v1/characters/profile?region=eu&realm=Dalaran&name="+ pseudo +"&fields=mythic_plus_scores_by_season%3Acurrent";
+                const options = {
+                headers: {
+                    Accept: 'application/json'
+                }
+                };
+                fetch(url, options)
+                .then( res => res.json() )
+                .then( (data) => {
+                    resultIO = data.name + " possede actuellement un score io de : " + data.mythic_plus_scores_by_season[0].scores.all;
+                    msg.channel.send(resultIO);
+                } 
+                );
+
+
+    }
+    if (msg.content.toLowerCase().includes('!affixes')) {
+
+                var resultIO;
+                
+                const url = "https://raider.io/api/v1/mythic-plus/affixes?region=eu&locale=fr";
+                const options = {
+                headers: {
+                    Accept: 'application/json'
+                }
+                };
+                fetch(url, options)
+                .then( res => res.json() )
+                .then( (data) => {
+                    var details ="";
+                    data.affix_details.forEach(element => {
+                        details += element.description + '\n \n';
+                    });
+                    msg.channel.send({
+                        embed: {
+                            color: 3447003,
+                            title: "Les affixes sont : ",
+                            description: data.title,
+                            fields: [{
+                                name: "Détails : ",
+                                value: details
+                            }]
+                        }
+                    });
+                } 
+                );
+
+
+    }
+    if (msg.content.toLowerCase().includes('!djdone')) {
+
+                var resultIO;
+                var pseudo = msg.content.substring(8);
+                
+                const url = "https://raider.io/api/v1/characters/profile?region=eu&realm=Dalaran&name="+pseudo+"&fields=mythic_plus_recent_runs";
+                const options = {
+                headers: {
+                    Accept: 'application/json'
+                }
+                };
+                fetch(url, options)
+                .then( res => res.json() )
+                .then( (data) => {
+                    var details ="";
+                    data.mythic_plus_recent_runs.forEach(element => {
+                        details +=  "**"+ element.short_name + '** M+' + element.mythic_level + ',           date : ' +  element.completed_at.slice(8,10) +'-' + element.completed_at.slice(5,7)+ ' \n \n';
+                    });
+                    msg.channel.send({
+                        embed: {
+                            color: 3447003,
+                            title: "Donjons fait récement:  ",
+                            description: data.title,
+                            fields: [{
+                                name: "Liste : ",
+                                value: details
+                            }]
+                        }
+                    });
+                } 
+                );
+
+
+    }
+
     
 });
+
+// Adding reaction-role function
+// client.on('messageReactionAdd', async (reaction, user) => {
+//     //Filter the reaction
+//     if (reaction.id === '🐙') {
+//      // Define the emoji user add
+//      let role = message.guild.roles.cache.find((role) => role.name === 'random');
+//      if (message.channel.name !== 'roles') {
+//       message.reply(':x: You must go to the channel #alerts');
+//      } else {
+//       message.member.addRole(role.id);
+//      }
+//     }
+//    });
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (reaction.message.partial) await reaction.message.fetch();
+    if (reaction.partial) await reaction.fetch();
+    if (user.bot) return;
+    if (!reaction.message.guild) return;
+    if (reaction.message.channel.id == '821679471681077258') {
+      if (reaction.emoji.name === '🐙') {
+        await reaction.message.guild.members.cache
+          .get(user.id)
+          .roles.add('821679357344743475');
+      }
+    } else return;
+  });
+  
+  // Removing reaction roles
+  client.on('messageReactionRemove', async (reaction, user) => {
+    if (reaction.message.partial) await reaction.message.fetch();
+    if (reaction.partial) await reaction.fetch();
+    if (user.bot) return;
+    if (!reaction.message.guild) return;
+    if (reaction.message.channel.id == '821679471681077258') {
+      if (reaction.emoji.name === '🐙') {
+        await reaction.message.guild.members.cache
+          .get(user.id)
+          .roles.remove('821679357344743475');
+      }
+    } else return;
+  });
+  
 
 
 
