@@ -146,15 +146,17 @@ client.on('message', msg => {
         // console.log(voices);
     }
     
-    if (msg.content.toLowerCase().includes('!rs')) {
-        msg.channel.send('N\'oubliez pas de vous sub aux réseaux sociaux : Twitch: twitch.tv/MisterDougi / Twitter : @MisterDougi / Wikipédia : wikipedia.com/dieu');
-        // console.log(voices);
-    }
 
     if (msg.content.toLowerCase().includes('antoine')) {
         msg.react("490170545447501839");
     }
     if (msg.content.toLowerCase().includes('albe')) {
+        msg.react("490164238183038976");
+    }
+    if (msg.content.toLowerCase().includes('albéric')) {
+        msg.react("490164238183038976");
+    }
+    if (msg.content.toLowerCase().includes('alberic')) {
         msg.react("490164238183038976");
     }
     if (msg.content.includes('albé')) {
@@ -247,6 +249,36 @@ client.on('message', msg => {
                             description: data.title,
                             fields: [{
                                 name: "Liste : ",
+                                value: details
+                            }]
+                        }
+                    });
+                } 
+                );
+
+
+    }
+    if (msg.content.toLowerCase().includes('tips')) {
+
+                var resultIO;
+                var pseudo = msg.content.substring(8);
+                
+                const url = "	https://api.adviceslip.com/advice";
+                const options = {
+                headers: {
+                    Accept: 'application/json'
+                }
+                };
+                fetch(url, options)
+                .then( res => res.json() )
+                .then( (data) => {
+                    var details = data.slip.advice;
+                    msg.channel.send({
+                        embed: {
+                            color: 3447003,
+                            description: data.title,
+                            fields: [{
+                                name: "Tips : ",
                                 value: details
                             }]
                         }
